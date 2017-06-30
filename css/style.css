@@ -1,0 +1,32 @@
+.card {
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 15px;
+    padding: 15px;
+    width: 30%;
+    float: left;
+    text-align: center;
+
+}
+
+.img-center{
+    margin: auto;
+}
+
+p{
+  padding-top: 30px;
+}
+
+.form-section-default{
+  display:none;
+}
+
+
+section .container {
+  width: 35%;
+}
+
+
+button .glyphicon{
+  padding: 5px;
+}

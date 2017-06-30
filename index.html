@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>To Do List workshop</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="text-center">
+      <h1>TODO List</h1>
+      <button id="createTask" type="button" name="button">New Task</button>
+      <button id="showAll" type="button" name="button">Show all tasks</button>
+    </div>
+
+    <section class="form-section-default">
+      <article class="container">
+        <form id="form" action="#">
+          <div class="form-group" id="titleLabel">
+            <label for="title" class="control-label" >Task title</label>
+            <input type="text" class="form-control" id="title" aria-describedby="notiHelper" placeholder="Insert a title to the task">
+            <small id="taskHelper" class="form-text text-muted">Title should be significant</small>
+          </div>
+
+          <div class="form-group" id="descriptionLabel">
+            <label for="description" class="control-label">Description</label>
+            <textarea class="form-control" id="description" rows="3"></textarea>
+          </div>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="completed">Completed
+            </label>
+          </div>
+
+
+          <button id="addTask" class="btn btn-primary">Add task</button>
+        </form>
+      </article>
+    </section>
+
+    <section class="container form-section-default">
+
+    </section>
+
+    <script type="text/javascript" src="js/objects.js"></script>
+    <script type="text/javascript" src="js/events.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+  </body>
+</html>
