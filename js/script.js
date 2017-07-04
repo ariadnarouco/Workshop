@@ -30,7 +30,7 @@ function onAddTask() {
   var title = document.getElementById("title").value;
   var description = document.getElementById("description").value;
   var completed = document.getElementById("completed").value;
-  id = id + 1;
+
 
   if(!isBlankOrNull(title) && !isBlankOrNull(description)){
     var t = new Task(id,title, description,completed);
@@ -46,22 +46,19 @@ function onAddTask() {
       document.getElementById("descriptionLabel").classList.add("has-error");
     }
   }
-
+  id = id + 1;
 }
 
 function onEditTask(event){
 
-  // resetForm();
-  // var section =document.getElementsByTagName("section")[0];
-  // var but =document.getElementById("createTask");
-  //
-  // section.style.display = "block";
-  // but.textContent= "Close New task form";
-  // var task = getCurrentTask(event.currentTarget);
-  //
-  // document.getElementById("title").value = task.title;
-  // document.getElementById("description").value = task.description;
-  // //TODO: document.getElementById("completed").value = task.completed;
+  resetForm();
+  var task = event.currentTarget.parentElement;
+
+  for (var variable in taskList) {
+    if (taskList[variable].id == task.id) {
+      taskList.splice(variable,1);
+    }
+  }
 
 }
 
@@ -76,9 +73,6 @@ function onShowAll(){
     section.style.display = "block";
     but.textContent= "Hide all tasks";
   }
-  for (var t in taskList) {
-  //showTaskOnScreen(taskList[t]);
-  }
 }
 
 function findByTitle(){
@@ -86,14 +80,16 @@ function findByTitle(){
 }
 
 function onDeleteTask(event){
-  var id = event.currentTarget.name;
+  if(confirm("Do you want to delete this task?")){
+    var task = event.currentTarget.parentElement;
 
-  for (var variable in taskList) {
-    if (taskList[variable].id == id) {
-      taskList.remove(taskList[variable]);
+    for (var variable in taskList) {
+      if (taskList[variable].id == task.id) {
+        taskList.splice(variable,1);
+      }
     }
+    task.remove();
   }
-
 }
 
 
@@ -107,6 +103,7 @@ function showTaskOnScreen(t){
 
   var article = document.createElement("div");
   article.classList.add("card");
+  article.id = id;
 
   var h1Titlulo = document.createElement("h1");
   h1Titlulo.appendChild(document.createTextNode(t.title));
@@ -128,7 +125,6 @@ function showTaskOnScreen(t){
   editButton.addEventListener("click", function (event) {
     onEditTask(event);
   });
-  editButton.name=t.id;
   article.appendChild(editButton );
 
   var deleteButton = document.createElement("button");
@@ -139,7 +135,6 @@ function showTaskOnScreen(t){
   deleteButton.addEventListener("click", function (event) {
     onDeleteTask(event);
   });
-  deleteButton.name=t.id;
   article.appendChild(deleteButton );
 
   section.appendChild(article);
