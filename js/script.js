@@ -1,41 +1,60 @@
 var taskList=[];
 var id = 0;
 
-//Shows the new task form
-function onCreateTask() {
+//Shows the task form to create a task
+function onShowHideForm() {
 
-    var section =document.getElementsByTagName("section")[0];
-    var but =document.getElementById("createTask");
+  resetForm();
+  var section =document.getElementsByTagName("section")[0];
 
-    if(section.style.display ==="block"){
-      section.style.display= "none";
-      but.textContent= "Add task";
-    }else{
-      section.style.display = "block";
-      but.textContent= "Close New task form";
-    }
-    document.getElementById("form").reset();
-    resetForm();
-
+  if(section.style.display ==="block"){
+    hideForm();
+  }else{
+    showForm();
+  }
 }
 
+
+//Private Methods used in onShowHideForm
+function hideForm() {
+  var section =document.getElementsByTagName("section")[0];
+  var but =document.getElementById("showHideForm");
+  section.style.display= "none";
+  but.textContent= "Add task";
+}
+function showForm() {
+  var section =document.getElementsByTagName("section")[0];
+  var but =document.getElementById("showHideForm");
+  section.style.display = "block";
+  but.textContent= "Close New task form";
+}
+
+//Private Method to reset all the field values and validations in the form
 function resetForm() {
   document.getElementById("titleLabel").classList.remove("has-error");
   document.getElementById("descriptionLabel").classList.remove("has-error");
   document.getElementById("form").reset();
 }
 
-function onAddTask() {
+//Adds or Edits a task when the button "Add task" is clicked
+function onAddEditTask() {
+  var taskToEdit = localStorage.getItem("taskToEdit");
+  if(isBlankOrNull(taskToEdit)){
+    createTask();
+  }else{
+    editTask(taskToEdit);
+  }
+}
 
+//Private methods used but onAddEditTas
+function createTask() {
   var title = document.getElementById("title").value;
   var description = document.getElementById("description").value;
-  var completed = document.getElementById("completed").value;
-
-
+  var completed = document.getElementById("completed").checked;
   if(!isBlankOrNull(title) && !isBlankOrNull(description)){
     var t = new Task(id,title, description,completed);
     taskList.push(t);
-    showTaskOnScreen(t);
+    addTaskToScreen(t);
     alert("Task has been successfully added");
     resetForm();
   }else{
@@ -49,30 +68,76 @@ function onAddTask() {
   id = id + 1;
 }
 
-function onEditTask(event){
-
-  resetForm();
-  var task = event.currentTarget.parentElement;
+function editTask(taskToEdit) {
+  var title = document.getElementById("title").value;
+  var description = document.getElementById("description").value;
+  var completed = document.getElementById("completed").checked;
 
   for (var variable in taskList) {
-    if (taskList[variable].id == task.id) {
-      taskList.splice(variable,1);
+    if (taskList[variable].id == taskToEdit) {
+      taskList[variable].title = title;
+      taskList[variable].completed = completed;
+      taskList[variable].description = description;
+      var htmlTask = document.getElementById(variable);
+      htmlTask.querySelector("h1").innerText = title ;
+      htmlTask.querySelector("small").innerText = (completed ? "Completed": "Incomplete") ;
+      htmlTask.querySelector("p").innerText = description ;
     }
   }
+  localStorage.removeItem("taskToEdit");
+  alert("Task has been successfully updated");
+  resetForm();
+}
+
+
+
+function onEditTask(event){
+
+  var taskToEditId = event.currentTarget.parentElement.id;
+  resetForm();
+  showForm();
+
+  var task = getTaskFromTaskList(taskToEditId);
+
+  document.getElementById("title").value= task.title;
+  document.getElementById("completed").checked= task.completed;
+  document.getElementById("description").value= task.description;
+  localStorage.setItem("taskToEdit", taskToEditId);
+}
+
+
+function getTaskFromTaskList(taskToEditId) {
+  for (var variable in taskList) {
+    if (taskList[variable].id == taskToEditId) {
+      return taskList[variable];
+    }
+  }
+}
+
+function onShowHideAll(){
+  var section =document.getElementsByTagName("section")[1];
+
+  if(section.style.display ==="block"){
+    hideAllTasks();
+  }else{
+    showAllTasks();
+  }
+}
+
+function showAllTasks() {
+  var section =document.getElementsByTagName("section")[1];
+  var but =document.getElementById("showHideAll");
+  section.style.display = "block";
+  but.textContent= "Hide all tasks";
 
 }
 
-function onShowAll(){
+function hideAllTasks() {
   var section =document.getElementsByTagName("section")[1];
-  var but =document.getElementById("showAll");
+  var but =document.getElementById("showHideAll");
+  section.style.display= "none";
+  but.textContent= "Show all tasks";
 
-  if(section.style.display ==="block"){
-    section.style.display= "none";
-    but.textContent= "Show all tasks";
-  }else{
-    section.style.display = "block";
-    but.textContent= "Hide all tasks";
-  }
 }
 
 function findByTitle(){
@@ -98,7 +163,7 @@ function isBlankOrNull(variable){
   return (variable === "" || variable === null || variable === undefined );
 }
 
-function showTaskOnScreen(t){
+function addTaskToScreen(t){
   var section =document.getElementsByTagName("section")[1];
 
   var article = document.createElement("div");
@@ -110,7 +175,7 @@ function showTaskOnScreen(t){
   article.appendChild(h1Titlulo);
 
   var smallGenero = document.createElement("small");
-  smallGenero.appendChild(document.createTextNode(t.completed === "on" ? "Completed" : "Incomplete"));
+  smallGenero.appendChild(document.createTextNode(t.completed ? "Completed" : "Incomplete"));
   article.appendChild(smallGenero);
 
   var pSinopsis = document.createElement("p");

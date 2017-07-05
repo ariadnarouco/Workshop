@@ -1,14 +1,14 @@
 //When add task button is pressed
-document.getElementById("createTask").addEventListener("click", function (){
-  onCreateTask();
+document.getElementById("showHideForm").addEventListener("click", function (){
+  onShowHideForm();
 });
 
 //When add task button is pressed
-document.getElementById("addTask").addEventListener("click", function (){
-  onAddTask();
+document.getElementById("addEditTask").addEventListener("click", function (){
+  onAddEditTask();
 });
 
 //When add task button is pressed
-document.getElementById("showAll").addEventListener("click", function (){
-  onShowAll();
+document.getElementById("showHideAll").addEventListener("click", function (){
+  onShowHideAll();
 });
